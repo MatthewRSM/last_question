@@ -39,6 +39,7 @@ class _QuizScreenState extends State<QuizScreen> {
     void initState() {
 
         super.initState();
+        remainingSeconds = maxSeconds;
         startTimer();
         loadTriviaQuestions();
 
@@ -90,7 +91,8 @@ class _QuizScreenState extends State<QuizScreen> {
     int currentQuestionIndex = 0;
 
     Timer? gameTimer;
-    int remainingSeconds = 30;
+    int maxSeconds = 20;
+    int remainingSeconds = 20;
     bool isGameOver = false;
 
     void startTimer() {
@@ -228,7 +230,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                 setState(() {
                                                                     score++;
                                                                     currentQuestionIndex++;
-                                                                    remainingSeconds = 30;
+                                                                    remainingSeconds = maxSeconds;
                                                                 });
                                                                 
                                                                 shuffleAnswers();

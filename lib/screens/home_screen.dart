@@ -119,6 +119,36 @@ class HomeScreen extends StatelessWidget {
                                 ),
                             ],
                         ),
+                        // Settings Button
+                        Positioned(
+                            right: 40,
+                            bottom: 40,
+                            child: SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: ElevatedButton(
+                                    onPressed: null,
+                                    style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size.zero,
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        alignment: Alignment.center,
+                                        backgroundColor: AppColours.foreground,
+                                        foregroundColor: AppColours.white,
+                                        disabledBackgroundColor: AppColours.foreground.withOpacity(0.5),
+                                        disabledForegroundColor: AppColours.white.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        elevation: 0,
+                                    ),
+                                    child: const Icon(
+                                        Icons.settings,
+                                        size: 30,
+                                    ),
+                                ),
+                            ),
+                        ),
                     ],
                 ),
             ),
