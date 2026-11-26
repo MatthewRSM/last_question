@@ -95,12 +95,12 @@ class HomeScreen extends StatelessWidget {
                                         width: double.infinity,
                                         height: 60,
                                         child: ElevatedButton(
-                                            onPressed: () {
-                                                // Navigation too be added
-                                            },
+                                            onPressed: null,
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: AppColours.foreground,
                                                 foregroundColor: AppColours.white,
+                                                disabledBackgroundColor: AppColours.foreground.withOpacity(0.5),
+                                                disabledForegroundColor: AppColours.white.withOpacity(0.5),
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(15),
                                                 ),

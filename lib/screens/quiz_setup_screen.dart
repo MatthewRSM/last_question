@@ -202,8 +202,8 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: AppColours.white,
                                                 foregroundColor: AppColours.foreground,
-                                                disabledBackgroundColor: AppColours.grey,
-                                                disabledForegroundColor: AppColours.foreground,
+                                                disabledBackgroundColor: AppColours.white.withOpacity(0.5),
+                                                disabledForegroundColor: AppColours.foreground.withOpacity(0.5),
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(15),
                                                 ),

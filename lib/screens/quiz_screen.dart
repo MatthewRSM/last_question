@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colours.dart';
 import '../data/trivia_question.dart';
 import '../api/trivia_api.dart';
+import 'dart:async';
 
 class QuizScreen extends StatefulWidget {
     
@@ -33,17 +34,32 @@ class _QuizScreenState extends State<QuizScreen> {
     List<TriviaQuestion> questions = [];
     List<String> shuffledAnswers = [];
 
+    // Calls API on page load
     @override
     void initState() {
+
         super.initState();
+        startTimer();
         loadTriviaQuestions();
+
+    }
+
+    // Cancels timer on page close
+    @override
+    void dispose() {
+
+        gameTimer?.cancel();
+        super.dispose();
+
     }
 
     // Fetch trivia questions
     Future<void> loadTriviaQuestions() async {
+        
         try {
             questions = await triviaApi.fetchTriviaQuestions(
-                amount: 10,
+                // Fetch 25 questions based on the selected difficulty and category
+                amount: 25,
                 difficulty: widget.difficulty.toLowerCase(),
                 categoryId: widget.categoryId,
             );
@@ -58,6 +74,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 isLoading = false;
             });
         }
+
     }
 
     void shuffleAnswers() {
@@ -72,6 +89,66 @@ class _QuizScreenState extends State<QuizScreen> {
     int score = 0;
     int currentQuestionIndex = 0;
 
+    Timer? gameTimer;
+    int remainingSeconds = 30;
+    bool isGameOver = false;
+
+    void startTimer() {
+
+        gameTimer?.cancel();
+
+        gameTimer = Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+                if (!mounted || isGameOver) {
+                    timer.cancel();
+                    return;
+                }
+                if (remainingSeconds <= 0) {
+                    timer.cancel();
+                    setState(() {
+                        remainingSeconds = 0;
+                        isGameOver = true;
+                    });
+                    showGameOverDialog();
+                } 
+                else {
+                    setState(() {
+                        remainingSeconds--;
+                    });
+                }
+            }
+        );
+
+    }
+
+    void showGameOverDialog() {
+        
+        gameTimer?.cancel();
+
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+                return AlertDialog(
+                    title: const Text('Game Over!'),
+                    content: Text('Final Score: $score'),
+                    actions: [
+                        TextButton(
+                            onPressed: () {
+                                Navigator.popUntil(
+                                    context,
+                                    (route) => route.isFirst,
+                                );
+                            },
+                            child: const Text('Back to Home'),
+                        ),
+                    ],
+                );
+            },
+        );
+
+    }
 
     @override
     Widget build(BuildContext context) {
@@ -128,7 +205,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 // Spacing
                                 const SizedBox(height: 50),
-
                                 // Display answer buttons or a loading indicator
                                 if (isLoading)
                                     const CircularProgressIndicator()
@@ -152,33 +228,18 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                 setState(() {
                                                                     score++;
                                                                     currentQuestionIndex++;
+                                                                    remainingSeconds = 30;
                                                                 });
-
-                                                                // If there are more questions, shuffle the answers for the next question
-                                                                if (currentQuestionIndex < questions.length) {
-                                                                    shuffleAnswers();
-                                                                }
+                                                                
+                                                                shuffleAnswers();
                                                             }
                                                             // Game Over
                                                             else {
-                                                                showDialog(
-                                                                    context: context,
-                                                                    builder: (context) {
-                                                                        return AlertDialog(
-                                                                            title: const Text('Game Over!'),
-                                                                            content: Text('Final score: $score'),
-                                                                            actions: [
-                                                                                TextButton(
-                                                                                    onPressed: () {
-                                                                                        Navigator.pop(context); 
-                                                                                        Navigator.pop(context);
-                                                                                    },
-                                                                                    child: const Text('Finish'),
-                                                                                ),
-                                                                            ],
-                                                                        );
-                                                                    },
-                                                                );   
+                                                                setState(() {
+                                                                    isGameOver = true;
+                                                                });
+
+                                                                showGameOverDialog();
                                                             }
                                                         },
                                                         style: ElevatedButton.styleFrom(
@@ -201,8 +262,30 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 ),
                                             );
                                         }).toList(),
-                                    ),    
-                            ]
+                                    ),   
+                                // Spacing
+                                const SizedBox(height: 20),
+                                // Score
+                                Text (
+                                    'Score: $score',
+                                    style: const TextStyle(
+                                        color: AppColours.foreground,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                    ),
+                                ),
+                                // Spacing
+                                const SizedBox(height: 20),
+                                // Timer
+                                Text (
+                                    'Time Remaining: ${remainingSeconds}s',
+                                    style: const TextStyle(
+                                        color: AppColours.foreground,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                    ),
+                                ),
+                            ],
                         ),
                     ],
                 ),

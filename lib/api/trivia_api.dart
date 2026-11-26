@@ -36,6 +36,7 @@ class TriviaApi {
         }
     }
     
+    // Decodes HTML in strings returned by the API
     String decodeHtml(String text) {
         return parse(text).documentElement!.text;
     }
