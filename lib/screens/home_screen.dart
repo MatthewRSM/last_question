@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colours.dart';
+import 'quiz_setup_screen.dart';
 
 class HomeScreen extends StatelessWidget {
     
@@ -51,14 +52,21 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 // Spacing
                                 const SizedBox(height: 50),
-                                // Start Quiz Button
+                                // Setup Quiz Button
                                 Padding (
                                     padding: const EdgeInsets.symmetric(horizontal: 40),
                                     child: SizedBox(
                                         width: double.infinity,
                                         height: 60,
                                         child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => QuizSetupScreen(),    
+                                                    ),
+                                                );
+                                            },
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: AppColours.white,
                                                 foregroundColor: AppColours.foreground,
@@ -68,7 +76,38 @@ class HomeScreen extends StatelessWidget {
                                                 elevation: 0,
                                             ),
                                             child: const Text(
-                                                'START QUIZ',
+                                                'SETUP QUIZ',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                // Spacing
+                                const SizedBox(height: 15),
+                                // Leaderboard Button
+                                Padding (
+                                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                                    child: SizedBox(
+                                        width: double.infinity,
+                                        height: 60,
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                                // Navigation too be added
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColours.foreground,
+                                                foregroundColor: AppColours.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(15),
+                                                ),
+                                                elevation: 0,
+                                            ),
+                                            child: const Text(
+                                                'LEADERBOARD',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
