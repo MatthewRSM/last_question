@@ -112,7 +112,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         remainingSeconds = 0;
                         isGameOver = true;
                     });
-                    showGameOverDialog();
+                    showGameOverDialog(questions[currentQuestionIndex].correctAnswer);
                 } 
                 else {
                     setState(() {
@@ -124,7 +124,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
     }
 
-    void showGameOverDialog() {
+    void showGameOverDialog(String correctAnswer) {
         
         gameTimer?.cancel();
 
@@ -134,7 +134,7 @@ class _QuizScreenState extends State<QuizScreen> {
             builder: (context) {
                 return AlertDialog(
                     title: const Text('Game Over!'),
-                    content: Text('Final Score: $score'),
+                    content: Text('Final Score: $score\nCorrect Answer: $correctAnswer'),
                     actions: [
                         TextButton(
                             onPressed: () {
@@ -241,7 +241,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                     isGameOver = true;
                                                                 });
 
-                                                                showGameOverDialog();
+                                                                showGameOverDialog(questions[currentQuestionIndex].correctAnswer);
                                                             }
                                                         },
                                                         style: ElevatedButton.styleFrom(
